@@ -115,6 +115,8 @@ namespace Flopify {
 			// 
 			// menuStrip1
 			// 
+			this->menuStrip1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(45)), static_cast<System::Int32>(static_cast<System::Byte>(45)),
+				static_cast<System::Int32>(static_cast<System::Byte>(45)));
 			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->menuToolStripMenuItem });
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
@@ -128,12 +130,16 @@ namespace Flopify {
 				this->openToolStripMenuItem,
 					this->addToolStripMenuItem, this->saveToolStripMenuItem
 			});
+			this->menuToolStripMenuItem->ForeColor = System::Drawing::Color::White;
 			this->menuToolStripMenuItem->Name = L"menuToolStripMenuItem";
 			this->menuToolStripMenuItem->Size = System::Drawing::Size(50, 20);
 			this->menuToolStripMenuItem->Text = L"Menu";
 			// 
 			// openToolStripMenuItem
 			// 
+			this->openToolStripMenuItem->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(45)),
+				static_cast<System::Int32>(static_cast<System::Byte>(45)), static_cast<System::Int32>(static_cast<System::Byte>(45)));
+			this->openToolStripMenuItem->ForeColor = System::Drawing::Color::White;
 			this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
 			this->openToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->openToolStripMenuItem->Text = L"Open";
@@ -141,6 +147,9 @@ namespace Flopify {
 			// 
 			// addToolStripMenuItem
 			// 
+			this->addToolStripMenuItem->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(45)),
+				static_cast<System::Int32>(static_cast<System::Byte>(45)), static_cast<System::Int32>(static_cast<System::Byte>(45)));
+			this->addToolStripMenuItem->ForeColor = System::Drawing::Color::White;
 			this->addToolStripMenuItem->Name = L"addToolStripMenuItem";
 			this->addToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->addToolStripMenuItem->Text = L"Add";
@@ -148,6 +157,9 @@ namespace Flopify {
 			// 
 			// saveToolStripMenuItem
 			// 
+			this->saveToolStripMenuItem->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(45)),
+				static_cast<System::Int32>(static_cast<System::Byte>(45)), static_cast<System::Int32>(static_cast<System::Byte>(45)));
+			this->saveToolStripMenuItem->ForeColor = System::Drawing::Color::White;
 			this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
 			this->saveToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->saveToolStripMenuItem->Text = L"Save";
@@ -155,13 +167,13 @@ namespace Flopify {
 			// 
 			// flowLayoutPanel1
 			// 
+			this->flowLayoutPanel1->AutoScroll = true;
 			this->flowLayoutPanel1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(45)), static_cast<System::Int32>(static_cast<System::Byte>(45)),
 				static_cast<System::Int32>(static_cast<System::Byte>(45)));
 			this->flowLayoutPanel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->flowLayoutPanel1->FlowDirection = System::Windows::Forms::FlowDirection::TopDown;
-			this->flowLayoutPanel1->Location = System::Drawing::Point(644, 40);
+			this->flowLayoutPanel1->Location = System::Drawing::Point(166, 40);
 			this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
-			this->flowLayoutPanel1->Size = System::Drawing::Size(521, 402);
+			this->flowLayoutPanel1->Size = System::Drawing::Size(878, 323);
 			this->flowLayoutPanel1->TabIndex = 4;
 			// 
 			// flowLayoutPanel2
@@ -169,10 +181,10 @@ namespace Flopify {
 			this->flowLayoutPanel2->Controls->Add(this->playBtn);
 			this->flowLayoutPanel2->Controls->Add(this->pauseResumeBtn);
 			this->flowLayoutPanel2->Controls->Add(this->stopBtn);
-			this->flowLayoutPanel2->Location = System::Drawing::Point(229, 374);
+			this->flowLayoutPanel2->Location = System::Drawing::Point(527, 383);
 			this->flowLayoutPanel2->Name = L"flowLayoutPanel2";
 			this->flowLayoutPanel2->Padding = System::Windows::Forms::Padding(3);
-			this->flowLayoutPanel2->Size = System::Drawing::Size(332, 68);
+			this->flowLayoutPanel2->Size = System::Drawing::Size(181, 59);
 			this->flowLayoutPanel2->TabIndex = 5;
 			// 
 			// playBtn
@@ -182,7 +194,7 @@ namespace Flopify {
 			this->playBtn->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"playBtn.Image")));
 			this->playBtn->Location = System::Drawing::Point(6, 6);
 			this->playBtn->Name = L"playBtn";
-			this->playBtn->Size = System::Drawing::Size(91, 62);
+			this->playBtn->Size = System::Drawing::Size(43, 45);
 			this->playBtn->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->playBtn->TabIndex = 1;
 			this->playBtn->TabStop = false;
@@ -192,9 +204,9 @@ namespace Flopify {
 			// 
 			this->pauseResumeBtn->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->pauseResumeBtn->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pauseResumeBtn.Image")));
-			this->pauseResumeBtn->Location = System::Drawing::Point(103, 6);
+			this->pauseResumeBtn->Location = System::Drawing::Point(55, 6);
 			this->pauseResumeBtn->Name = L"pauseResumeBtn";
-			this->pauseResumeBtn->Size = System::Drawing::Size(100, 62);
+			this->pauseResumeBtn->Size = System::Drawing::Size(55, 45);
 			this->pauseResumeBtn->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->pauseResumeBtn->TabIndex = 2;
 			this->pauseResumeBtn->TabStop = false;
@@ -204,9 +216,9 @@ namespace Flopify {
 			// 
 			this->stopBtn->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->stopBtn->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"stopBtn.Image")));
-			this->stopBtn->Location = System::Drawing::Point(209, 6);
+			this->stopBtn->Location = System::Drawing::Point(116, 6);
 			this->stopBtn->Name = L"stopBtn";
-			this->stopBtn->Size = System::Drawing::Size(112, 62);
+			this->stopBtn->Size = System::Drawing::Size(55, 45);
 			this->stopBtn->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->stopBtn->TabIndex = 3;
 			this->stopBtn->TabStop = false;
@@ -215,10 +227,10 @@ namespace Flopify {
 			// trackPlayBar
 			// 
 			this->trackPlayBar->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->trackPlayBar->Location = System::Drawing::Point(257, 345);
+			this->trackPlayBar->Location = System::Drawing::Point(312, 437);
 			this->trackPlayBar->Margin = System::Windows::Forms::Padding(0);
 			this->trackPlayBar->Name = L"trackPlayBar";
-			this->trackPlayBar->Size = System::Drawing::Size(269, 45);
+			this->trackPlayBar->Size = System::Drawing::Size(606, 45);
 			this->trackPlayBar->TabIndex = 6;
 			this->trackPlayBar->TickStyle = System::Windows::Forms::TickStyle::None;
 			this->trackPlayBar->Scroll += gcnew System::EventHandler(this, &Flopify::trackBar1_Scroll);
@@ -231,7 +243,7 @@ namespace Flopify {
 			// volumeIcon
 			// 
 			this->volumeIcon->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"volumeIcon.Image")));
-			this->volumeIcon->Location = System::Drawing::Point(13, 407);
+			this->volumeIcon->Location = System::Drawing::Point(1009, 427);
 			this->volumeIcon->Name = L"volumeIcon";
 			this->volumeIcon->Size = System::Drawing::Size(35, 35);
 			this->volumeIcon->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
@@ -241,7 +253,7 @@ namespace Flopify {
 			// volumeBar
 			// 
 			this->volumeBar->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->volumeBar->Location = System::Drawing::Point(54, 417);
+			this->volumeBar->Location = System::Drawing::Point(1050, 437);
 			this->volumeBar->Name = L"volumeBar";
 			this->volumeBar->Size = System::Drawing::Size(104, 45);
 			this->volumeBar->TabIndex = 8;
@@ -268,10 +280,10 @@ namespace Flopify {
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(25)), static_cast<System::Int32>(static_cast<System::Byte>(25)),
 				static_cast<System::Int32>(static_cast<System::Byte>(25)));
 			this->ClientSize = System::Drawing::Size(1190, 465);
+			this->Controls->Add(this->flowLayoutPanel2);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->volumeBar);
 			this->Controls->Add(this->volumeIcon);
-			this->Controls->Add(this->flowLayoutPanel2);
 			this->Controls->Add(this->flowLayoutPanel1);
 			this->Controls->Add(this->menuStrip1);
 			this->Controls->Add(this->trackPlayBar);
@@ -357,8 +369,10 @@ namespace Flopify {
 
 		pic->Image = Image::FromFile("images.jfif");
 		pic->SizeMode = PictureBoxSizeMode::Zoom;
-		label->Text = fileName;
+		label->Text = System::IO::Path::GetFileNameWithoutExtension(fileName);
 		label->ForeColor = Color::White;
+		label->Font = gcnew System::Drawing::Font("Segoe UI", 15.f);
+		label->TextAlign = ContentAlignment::MiddleCenter;
 
 		layoutPanel->Name = fileName;
 		layoutPanel->Anchor = AnchorStyles::None;
