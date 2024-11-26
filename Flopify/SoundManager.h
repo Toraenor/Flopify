@@ -5,10 +5,10 @@ public :
 	static SoundManager& Get();
 	bool Play(const char* path);
 private :
-	SoundManager() = default;
+	SoundManager();
 	~SoundManager();
 
-	unsigned int uiBuffer;
-	unsigned int uiSource;
+	unsigned int* uiBuffer;
+	unsigned int* uiSource;
 };
 

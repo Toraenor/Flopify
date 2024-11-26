@@ -11,12 +11,14 @@ SoundManager& SoundManager::Get()
 	return instance;
 }
 
+SoundManager::SoundManager()
+{
+	ALFWInit();
+}
+
 bool SoundManager::Play(const char* path)
 {
-	// Initialize Framework
-	ALFWInit();
-
-
+	
 	if (!ALFWInitOpenAL())
 	{
 		ALFWShutdown();
@@ -24,32 +26,50 @@ bool SoundManager::Play(const char* path)
 	}
 
 	// Generate an AL Buffer
-	alGenBuffers(1, &uiBuffer);
+	if (uiBuffer == nullptr)
+	{
+		uiBuffer = new unsigned int;
+		alGenBuffers(1, uiBuffer);
+	}
 
 	// Load Wave file into OpenAL Buffer
-	if (!ALFWLoadWaveToBuffer(path, uiBuffer))
+	if (!ALFWLoadWaveToBuffer(path, *uiBuffer))
 	{
 		ALFWprintf("Failed to load %s\n", ALFWaddMediaPath(path));
 		return false;
 	}
 
+	if (uiSource == nullptr)
+	{
+		uiSource = new unsigned int;
+		alGenSources(1, uiSource);
+	}
+	else
+	{
+		alSourceStop(*uiSource);
+	}
 	// Generate a Source to playback the Buffer
-	alGenSources(1, &uiSource);
+	
 
 	// Attach Source to Buffer
-	alSourcei(uiSource, AL_BUFFER, uiBuffer);
+	alSourcei(*uiSource, AL_BUFFER, *uiBuffer);
 
 	// Play Source
-	alSourcePlay(uiSource);
+	alSourcePlay(*uiSource);
 	return true;
 }
 
 SoundManager::~SoundManager()
 {
-	alSourceStop(uiSource);
-	alDeleteSources(1, &uiSource);
-	alDeleteBuffers(1, &uiBuffer);
+	alSourceStop(*uiSource);
+	alDeleteSources(1, uiSource);
+	alDeleteBuffers(1, uiBuffer);
 
+	delete uiSource;
+	delete uiBuffer;
+
+	uiSource = nullptr;
+	uiBuffer = nullptr;
 
 	ALFWShutdownOpenAL();
 	ALFWShutdown();
