@@ -14,11 +14,19 @@ SoundManager& SoundManager::Get()
 SoundManager::SoundManager()
 {
 	ALFWInit();
+
+	uiBuffer = new unsigned int;
+	alGenBuffers(1, uiBuffer);
+
+	uiSource = new unsigned int;
+	alGenSources(1, uiSource);
+
+	alSourcei(*uiSource, AL_BUFFER, *uiBuffer);
 }
 
 bool SoundManager::Play(const char* path)
 {
-	
+
 	if (!ALFWInitOpenAL())
 	{
 		ALFWShutdown();
@@ -26,11 +34,7 @@ bool SoundManager::Play(const char* path)
 	}
 
 	// Generate an AL Buffer
-	if (uiBuffer == nullptr)
-	{
-		uiBuffer = new unsigned int;
-		alGenBuffers(1, uiBuffer);
-	}
+
 
 	// Load Wave file into OpenAL Buffer
 	if (!ALFWLoadWaveToBuffer(path, *uiBuffer))
@@ -39,21 +43,7 @@ bool SoundManager::Play(const char* path)
 		return false;
 	}
 
-	if (uiSource == nullptr)
-	{
-		uiSource = new unsigned int;
-		alGenSources(1, uiSource);
-	}
-	else
-	{
-		alSourceStop(*uiSource);
-	}
-	// Generate a Source to playback the Buffer
-	
-
-	// Attach Source to Buffer
-	alSourcei(*uiSource, AL_BUFFER, *uiBuffer);
-
+	alSourceStop(*uiSource);
 	// Play Source
 	alSourcePlay(*uiSource);
 	return true;
