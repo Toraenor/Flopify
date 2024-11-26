@@ -61,15 +61,13 @@ namespace Flopify {
 	private: System::Windows::Forms::PictureBox^ volumeIcon;
 
 
-
-
-
+	private: System::Windows::Forms::FlowLayoutPanel^ selectedPanel;
 
 	private: System::ComponentModel::IContainer^ components;
 	private: System::Windows::Forms::TrackBar^ volumeBar;
+	private: System::Windows::Forms::Label^ label1;
 
 		   bool test = false;
-
 
 
 
@@ -104,6 +102,7 @@ namespace Flopify {
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->volumeIcon = (gcnew System::Windows::Forms::PictureBox());
 			this->volumeBar = (gcnew System::Windows::Forms::TrackBar());
+			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->menuStrip1->SuspendLayout();
 			this->flowLayoutPanel2->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->playBtn))->BeginInit();
@@ -136,30 +135,33 @@ namespace Flopify {
 			// openToolStripMenuItem
 			// 
 			this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
-			this->openToolStripMenuItem->Size = System::Drawing::Size(103, 22);
+			this->openToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->openToolStripMenuItem->Text = L"Open";
 			this->openToolStripMenuItem->Click += gcnew System::EventHandler(this, &Flopify::openToolStripMenuItem_Click);
 			// 
 			// addToolStripMenuItem
 			// 
 			this->addToolStripMenuItem->Name = L"addToolStripMenuItem";
-			this->addToolStripMenuItem->Size = System::Drawing::Size(103, 22);
+			this->addToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->addToolStripMenuItem->Text = L"Add";
 			this->addToolStripMenuItem->Click += gcnew System::EventHandler(this, &Flopify::addToolStripMenuItem_Click);
 			// 
 			// saveToolStripMenuItem
 			// 
 			this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
-			this->saveToolStripMenuItem->Size = System::Drawing::Size(103, 22);
+			this->saveToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->saveToolStripMenuItem->Text = L"Save";
 			this->saveToolStripMenuItem->Click += gcnew System::EventHandler(this, &Flopify::saveToolStripMenuItem_Click);
 			// 
 			// flowLayoutPanel1
 			// 
+			this->flowLayoutPanel1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(45)), static_cast<System::Int32>(static_cast<System::Byte>(45)),
+				static_cast<System::Int32>(static_cast<System::Byte>(45)));
+			this->flowLayoutPanel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			this->flowLayoutPanel1->FlowDirection = System::Windows::Forms::FlowDirection::TopDown;
-			this->flowLayoutPanel1->Location = System::Drawing::Point(644, 27);
+			this->flowLayoutPanel1->Location = System::Drawing::Point(644, 40);
 			this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
-			this->flowLayoutPanel1->Size = System::Drawing::Size(521, 426);
+			this->flowLayoutPanel1->Size = System::Drawing::Size(521, 402);
 			this->flowLayoutPanel1->TabIndex = 4;
 			// 
 			// flowLayoutPanel2
@@ -167,7 +169,7 @@ namespace Flopify {
 			this->flowLayoutPanel2->Controls->Add(this->playBtn);
 			this->flowLayoutPanel2->Controls->Add(this->pauseResumeBtn);
 			this->flowLayoutPanel2->Controls->Add(this->stopBtn);
-			this->flowLayoutPanel2->Location = System::Drawing::Point(210, 374);
+			this->flowLayoutPanel2->Location = System::Drawing::Point(229, 374);
 			this->flowLayoutPanel2->Name = L"flowLayoutPanel2";
 			this->flowLayoutPanel2->Padding = System::Windows::Forms::Padding(3);
 			this->flowLayoutPanel2->Size = System::Drawing::Size(332, 68);
@@ -176,6 +178,7 @@ namespace Flopify {
 			// playBtn
 			// 
 			this->playBtn->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"playBtn.BackgroundImage")));
+			this->playBtn->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->playBtn->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"playBtn.Image")));
 			this->playBtn->Location = System::Drawing::Point(6, 6);
 			this->playBtn->Name = L"playBtn";
@@ -187,6 +190,7 @@ namespace Flopify {
 			// 
 			// pauseResumeBtn
 			// 
+			this->pauseResumeBtn->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->pauseResumeBtn->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pauseResumeBtn.Image")));
 			this->pauseResumeBtn->Location = System::Drawing::Point(103, 6);
 			this->pauseResumeBtn->Name = L"pauseResumeBtn";
@@ -198,6 +202,7 @@ namespace Flopify {
 			// 
 			// stopBtn
 			// 
+			this->stopBtn->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->stopBtn->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"stopBtn.Image")));
 			this->stopBtn->Location = System::Drawing::Point(209, 6);
 			this->stopBtn->Name = L"stopBtn";
@@ -209,7 +214,8 @@ namespace Flopify {
 			// 
 			// trackPlayBar
 			// 
-			this->trackPlayBar->Location = System::Drawing::Point(254, 349);
+			this->trackPlayBar->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->trackPlayBar->Location = System::Drawing::Point(257, 345);
 			this->trackPlayBar->Margin = System::Windows::Forms::Padding(0);
 			this->trackPlayBar->Name = L"trackPlayBar";
 			this->trackPlayBar->Size = System::Drawing::Size(269, 45);
@@ -225,7 +231,7 @@ namespace Flopify {
 			// volumeIcon
 			// 
 			this->volumeIcon->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"volumeIcon.Image")));
-			this->volumeIcon->Location = System::Drawing::Point(12, 418);
+			this->volumeIcon->Location = System::Drawing::Point(13, 407);
 			this->volumeIcon->Name = L"volumeIcon";
 			this->volumeIcon->Size = System::Drawing::Size(35, 35);
 			this->volumeIcon->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
@@ -234,12 +240,26 @@ namespace Flopify {
 			// 
 			// volumeBar
 			// 
-			this->volumeBar->Location = System::Drawing::Point(53, 427);
+			this->volumeBar->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->volumeBar->Location = System::Drawing::Point(54, 417);
 			this->volumeBar->Name = L"volumeBar";
 			this->volumeBar->Size = System::Drawing::Size(104, 45);
 			this->volumeBar->TabIndex = 8;
 			this->volumeBar->TickStyle = System::Windows::Forms::TickStyle::None;
 			this->volumeBar->Value = 8;
+			// 
+			// label1
+			// 
+			this->label1->AutoSize = true;
+			this->label1->Font = (gcnew System::Drawing::Font(L"Segoe UI Variable Display", 25, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label1->ForeColor = System::Drawing::Color::Green;
+			this->label1->Location = System::Drawing::Point(4, 24);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(120, 46);
+			this->label1->TabIndex = 9;
+			this->label1->Text = L"Flopify";
+			this->label1->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// Flopify
 			// 
@@ -248,6 +268,7 @@ namespace Flopify {
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(25)), static_cast<System::Int32>(static_cast<System::Byte>(25)),
 				static_cast<System::Int32>(static_cast<System::Byte>(25)));
 			this->ClientSize = System::Drawing::Size(1190, 465);
+			this->Controls->Add(this->label1);
 			this->Controls->Add(this->volumeBar);
 			this->Controls->Add(this->volumeIcon);
 			this->Controls->Add(this->flowLayoutPanel2);
@@ -273,9 +294,25 @@ namespace Flopify {
 #pragma endregion
 	private: System::Void Play_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		//ResetTrackBar();
-		SoundManager::Get().Play("collar.wav");
-		//play selected sound
+		PlayMusic();
+	}
+	private: System::Void PlayMusic()
+	{
+		if (selectedPanel != nullptr)
+		{
+			// Convert System::String^ to a char* using Marshal
+			IntPtr ptr = System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(System::IO::Path::GetFullPath(selectedPanel->Name));
+			char* unmanagedString = static_cast<char*>(ptr.ToPointer());
+			//ResetTrackBar();
+
+			if (!SoundManager::Get().Play(unmanagedString))
+			{
+				MessageBox::Show("couldn't play sound " + selectedPanel->Name);
+			}
+
+			// Don't forget to free the memory when done
+			System::Runtime::InteropServices::Marshal::FreeHGlobal(ptr);
+		}
 	}
 	private: System::Void Pause_Click(System::Object^ sender, System::EventArgs^ e)
 	{
@@ -284,7 +321,7 @@ namespace Flopify {
 		if (/* sound playing*/ test)
 		{
 			//pause playing sound
-			pauseResumeBtn->Image = Image::FromFile("play.png");
+			pauseResumeBtn->Image = Image::FromFile("resume.png");
 		}
 		else
 		{
@@ -299,54 +336,58 @@ namespace Flopify {
 	}
 	private: System::Void addToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		// Create an OpenFileDialog instance
 		OpenFileDialog^ openFileDialog = gcnew OpenFileDialog();
-
-		// Configure the dialog to filter for .wav files
 		openFileDialog->Filter = "WAV files (*.wav)|*.wav|All files (*.*)|*.*";
 		openFileDialog->Title = "Select a WAV File";
 
-		// Show the dialog and check if the user selected a file
 		if (openFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		{
-			// Get the selected file path
 			String^ filePath = openFileDialog->FileName;
 			String^ fileName = System::IO::Path::GetFileName(filePath);
 			musicNames->Add(fileName);
-
-			// Display the file path (example usage)
-			//MessageBox::Show("Selected WAV file: " + filePath);
-
 			CreateMusic(fileName);
 		}
 	}
 
 	private: void CreateMusic(String^ fileName)
 	{
-		FlowLayoutPanel^ testLayout = gcnew FlowLayoutPanel();
+		FlowLayoutPanel^ layoutPanel = gcnew FlowLayoutPanel();
 		Label^ label = gcnew Label();
 		PictureBox^ pic = gcnew PictureBox();
 
 		pic->Image = Image::FromFile("images.jfif");
+		pic->SizeMode = PictureBoxSizeMode::Zoom;
 		label->Text = fileName;
+		label->ForeColor = Color::White;
 
-		testLayout->Name = fileName;
-		testLayout->Anchor = AnchorStyles::None;
-		testLayout->BackColor = Color::White;
-		testLayout->AutoSize = true;
+		layoutPanel->Name = fileName;
+		layoutPanel->Anchor = AnchorStyles::None;
+		layoutPanel->BackColor = Color::White;
+		layoutPanel->AutoSize = true;
+		layoutPanel->BackColor = Color::FromArgb(25, 25, 25);
+		layoutPanel->Cursor = Cursors::Hand;
 
-		testLayout->Controls->Add(pic);
-		testLayout->Controls->Add(label);
+		layoutPanel->Controls->Add(pic);
+		layoutPanel->Controls->Add(label);
 
 		// Attach the same MouseDown event to the FlowLayoutPanel and its child controls
-		testLayout->MouseDown += gcnew MouseEventHandler(this, &Flopify::MusickOnClick);
-		pic->MouseDown += gcnew MouseEventHandler(this, &Flopify::MusickOnClick);
-		label->MouseDown += gcnew MouseEventHandler(this, &Flopify::MusickOnClick);
+		layoutPanel->MouseDown += gcnew MouseEventHandler(this, &Flopify::MusicOnClick);
+		pic->MouseDown += gcnew MouseEventHandler(this, &Flopify::MusicOnClick);
+		label->MouseDown += gcnew MouseEventHandler(this, &Flopify::MusicOnClick);
 
-		flowLayoutPanel1->Controls->Add(testLayout);
+		layoutPanel->MouseDoubleClick += gcnew MouseEventHandler(this, &Flopify::PlayMusicDoubleClick);
+		pic->MouseDoubleClick += gcnew MouseEventHandler(this, &Flopify::PlayMusicDoubleClick);
+		label->MouseDoubleClick += gcnew MouseEventHandler(this, &Flopify::PlayMusicDoubleClick);
+
+		flowLayoutPanel1->Controls->Add(layoutPanel);
 	}
 
-	private: System::Void MusickOnClick(System::Object^ sender, MouseEventArgs^ e)
+	private: System::Void PlayMusicDoubleClick(System::Object^ sender, MouseEventArgs^ e)
+	{
+		PlayMusic();
+	}
+
+	private: System::Void MusicOnClick(System::Object^ sender, MouseEventArgs^ e)
 	{
 		FlowLayoutPanel^ clickedPanel = nullptr;
 
@@ -365,33 +406,17 @@ namespace Flopify {
 
 		if (clickedPanel != nullptr)
 		{
-			// Perform actions with the clicked FlowLayoutPanel
-			MessageBox::Show("Clicked FlowLayoutPanel: " + clickedPanel->Name);
+			//MessageBox::Show("Clicked FlowLayoutPanel: " + clickedPanel->Name);
 			clickedPanel->Select();
-
-			// You can now use the filePath to play or process the .wav file
-// Example: Load the .wav file using System::Media::SoundPlayer
-			System::Media::SoundPlayer^ player = gcnew System::Media::SoundPlayer(System::IO::Path::GetFullPath(clickedPanel->Name));
-			try
-			{
-				player->Play(); // Play the .wav file asynchronously
-			}
-			catch (Exception^ ex)
-			{
-				MessageBox::Show("Error playing file: " + ex->Message);
-			}
+			selectedPanel = clickedPanel;
 		}
 	}
 	private: System::Void openToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		// Create an OpenFileDialog instance
 		OpenFileDialog^ openFileDialog = gcnew OpenFileDialog();
-
-		// Configure the dialog to filter for .wav files
 		openFileDialog->Filter = "TXT Files (*.txt)|*.txt";
 		openFileDialog->Title = "Select a TXT File";
 
-		// Show the dialog and check if the user selected a file
 		if (openFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		{
 			System::IO::StreamReader^ reader = gcnew System::IO::StreamReader(openFileDialog->FileName);
@@ -406,14 +431,10 @@ namespace Flopify {
 	}
 	private: System::Void saveToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		// Create an OpenFileDialog instance
 		SaveFileDialog^ saveFileDialog = gcnew SaveFileDialog();
-
-		// Configure the dialog to filter for .wav files
 		saveFileDialog->Filter = "TXT Files (*.txt)|*.txt";
 		saveFileDialog->Title = "Select a TXT File";
 
-		// Show the dialog and check if the user selected a file
 		if (saveFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		{
 			System::IO::StreamWriter^ writer = gcnew System::IO::StreamWriter(saveFileDialog->FileName);
@@ -447,5 +468,5 @@ namespace Flopify {
 			//trackBar1->Value = static_cast<int>(mediaPlayer->Ctlcontrols->currentPosition);
 		//}
 	}
-};
+	};
 }
