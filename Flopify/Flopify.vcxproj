@@ -92,9 +92,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Framework\Win32;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies />
+      <AdditionalDependencies>winmm.lib;libs\Win32\OpenAL32.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>Main</EntryPointSymbol>
     </Link>
@@ -130,11 +131,26 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Flopify.cpp" />
+    <ClCompile Include="framework\Win32\aldlist.cpp" />
+    <ClCompile Include="framework\Win32\CWaves.cpp" />
+    <ClCompile Include="framework\Win32\Framework.cpp" />
+    <ClCompile Include="framework\Win32\LoadOAL.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Flopify.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="framework\Win32\aldlist.h" />
+    <ClInclude Include="framework\Win32\CWaves.h" />
+    <ClInclude Include="framework\Win32\Framework.h" />
+    <ClInclude Include="framework\Win32\LoadOAL.h" />
+    <ClInclude Include="SoundManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flopify.resx">
+      <DependentUpon>Flopify.h</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
