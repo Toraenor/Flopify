@@ -28,14 +28,14 @@
 
 HINSTANCE g_hOpenALDLL = NULL;
 
-ALboolean LoadOAL10Library(LPCWSTR szOALFullPathName, LPOPENALFNTABLE lpOALFnTable)
+ALboolean LoadOAL10Library(char* szOALFullPathName, LPOPENALFNTABLE lpOALFnTable)
 {
 	if (!lpOALFnTable)
 		return AL_FALSE;
 
-	if (szOALFullPathName)
+	/*if (szOALFullPathName)
 		g_hOpenALDLL = LoadLibrary(szOALFullPathName);
-	else
+	else*/
 		g_hOpenALDLL = LoadLibrary(_T("openal32.dll"));
 	
 	if (!g_hOpenALDLL)
