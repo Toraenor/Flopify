@@ -11,9 +11,12 @@ public :
 	void ChangeVolume(float newVolume);
 	void ChangeMusicTime(float newTime);
 	float GetMusicDuration();
+	float GetCurrentMusicTime();
 private :
 	SoundManager();
 	~SoundManager();
+
+	void PlayOGG();
 
 	unsigned int      uiBuffer;
 	unsigned int      uiSource;

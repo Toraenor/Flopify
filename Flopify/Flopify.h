@@ -240,6 +240,7 @@ namespace Flopify {
 			// 
 			this->timer1->Interval = 10;
 			this->timer1->Tick += gcnew System::EventHandler(this, &Flopify::timer1_Tick);
+			this->timer1->Start();
 			// 
 			// volumeIcon
 			// 
@@ -467,12 +468,12 @@ namespace Flopify {
 		TrackBar^ timeBar = (TrackBar^)sender;
 		float currentTime = timeBar->Value;
 		float maxValue = timeBar->Maximum;
-		float newVolume = 0;
+		float newTime = 0;
 		if (maxValue != 0)
 		{
-			newVolume = currentTime / maxValue;
+			newTime = currentTime / maxValue;
 		}
-		SoundManager::Get().ChangeMusicTime(newVolume);
+		SoundManager::Get().ChangeMusicTime(newTime);
 		// Seek to the selected position
 		//mediaPlayer->Ctlcontrols->currentPosition = trackBar1->Value;
 	}
@@ -486,12 +487,14 @@ namespace Flopify {
 
 	private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e)
 	{
-		// Check if music is playing
-		//if (mediaPlayer->playState == WMPLib::WMPPlayState::wmppsPlaying)
-		//{
-			// Update the TrackBar to reflect the current position
-			//trackBar1->Value = static_cast<int>(mediaPlayer->Ctlcontrols->currentPosition);
-		//}
+		if (SoundManager::Get().IsPlaying())
+		{
+			float currentTime = SoundManager::Get().GetCurrentMusicTime();
+			float totalTime = SoundManager::Get().GetMusicDuration();
+			float percent = currentTime / totalTime;
+			int onMax = trackPlayBar->Maximum * percent;
+			trackPlayBar->Value = onMax;
+		}
 	}
 
 	private: char* ConvertStringToCharPointer(String^ string) {

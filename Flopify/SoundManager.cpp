@@ -1,6 +1,7 @@
 #include "SoundManager.h"
 #include "Framework.h"
 #include "CWaves.h"
+#include "Vorbis/vorbisfile.h"
 #include <iostream>
 #define NUMBUFFERS (4)
 #define	SERVICE_UPDATE_PERIOD	(20)
@@ -42,7 +43,7 @@ bool SoundManager::Play(const char* path)
 	}
 	else if (extension == ".ogg")
 	{
-
+		PlayOGG();
 	}
 	
 	alSourcei(uiSource, AL_BUFFER, uiBuffer);
@@ -109,10 +110,21 @@ float SoundManager::GetMusicDuration()
 	return durationInSeconds;
 }
 
+float SoundManager::GetCurrentMusicTime()
+{
+	float returnValue = 0;
+	alGetSourcef(uiSource, AL_SEC_OFFSET, &returnValue);
+	return returnValue;
+}
+
 
 
 SoundManager::~SoundManager()
 {
 	ALFWShutdownOpenAL();
 	ALFWShutdown();
+}
+
+void SoundManager::PlayOGG()
+{
 }
