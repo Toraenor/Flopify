@@ -141,7 +141,7 @@ namespace Flopify {
 				static_cast<System::Int32>(static_cast<System::Byte>(45)), static_cast<System::Int32>(static_cast<System::Byte>(45)));
 			this->openToolStripMenuItem->ForeColor = System::Drawing::Color::White;
 			this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
-			this->openToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->openToolStripMenuItem->Size = System::Drawing::Size(103, 22);
 			this->openToolStripMenuItem->Text = L"Open";
 			this->openToolStripMenuItem->Click += gcnew System::EventHandler(this, &Flopify::openToolStripMenuItem_Click);
 			// 
@@ -151,7 +151,7 @@ namespace Flopify {
 				static_cast<System::Int32>(static_cast<System::Byte>(45)), static_cast<System::Int32>(static_cast<System::Byte>(45)));
 			this->addToolStripMenuItem->ForeColor = System::Drawing::Color::White;
 			this->addToolStripMenuItem->Name = L"addToolStripMenuItem";
-			this->addToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->addToolStripMenuItem->Size = System::Drawing::Size(103, 22);
 			this->addToolStripMenuItem->Text = L"Add";
 			this->addToolStripMenuItem->Click += gcnew System::EventHandler(this, &Flopify::addToolStripMenuItem_Click);
 			// 
@@ -161,7 +161,7 @@ namespace Flopify {
 				static_cast<System::Int32>(static_cast<System::Byte>(45)), static_cast<System::Int32>(static_cast<System::Byte>(45)));
 			this->saveToolStripMenuItem->ForeColor = System::Drawing::Color::White;
 			this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
-			this->saveToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->saveToolStripMenuItem->Size = System::Drawing::Size(103, 22);
 			this->saveToolStripMenuItem->Text = L"Save";
 			this->saveToolStripMenuItem->Click += gcnew System::EventHandler(this, &Flopify::saveToolStripMenuItem_Click);
 			// 
@@ -259,16 +259,17 @@ namespace Flopify {
 			this->volumeBar->TabIndex = 8;
 			this->volumeBar->TickStyle = System::Windows::Forms::TickStyle::None;
 			this->volumeBar->Value = 8;
+			this->volumeBar->Scroll += gcnew System::EventHandler(this, &Flopify::volumeBar_Scroll);
 			// 
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Segoe UI Variable Display", 25, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 25, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label1->ForeColor = System::Drawing::Color::Green;
 			this->label1->Location = System::Drawing::Point(4, 24);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(120, 46);
+			this->label1->Size = System::Drawing::Size(118, 39);
 			this->label1->TabIndex = 9;
 			this->label1->Text = L"Flopify";
 			this->label1->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
@@ -326,23 +327,23 @@ namespace Flopify {
 	}
 	private: System::Void Pause_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		test = !test;
 		//pause selected sound
-		if (/* sound playing*/ test)
+		if (SoundManager::Get().IsPlaying())
 		{
 			//pause playing sound
 			pauseResumeBtn->Image = Image::FromFile("resume.png");
+			SoundManager::Get().Pause();
 		}
 		else
 		{
 			//resume sound
 			pauseResumeBtn->Image = Image::FromFile("pause.png");
+			SoundManager::Get().Resume();
 		}
 	}
 	private: System::Void Stop_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		//stop selected sound
-		//ResetTrackBar();
+		SoundManager::Get().Stop();
 	}
 	private: System::Void addToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 	{
@@ -499,5 +500,18 @@ namespace Flopify {
 
 		return charPtr;
 	}
-	};
+
+	private: System::Void volumeBar_Scroll(System::Object^ sender, System::EventArgs^ e) 
+	{
+		TrackBar^ volumebar = (TrackBar^)sender;
+		float currentVolume = volumeBar->Value;
+		float maxValue = volumeBar->Maximum;
+		float newVolume = 0;
+		if (maxValue != 0)
+		{
+			newVolume = currentVolume / maxValue;
+		}
+		SoundManager::Get().ChangeVolume(newVolume);
+	}
+};
 }
