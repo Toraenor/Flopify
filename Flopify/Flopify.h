@@ -1,6 +1,5 @@
 #pragma once
 #include "SoundManager.h"
-#include "FloatTrackbar.h"
 
 namespace Flopify {
 
@@ -53,7 +52,7 @@ namespace Flopify {
 
 	private: System::Collections::Generic::List<String^>^ musicNames;
 	private: System::Windows::Forms::ToolStripMenuItem^ openToolStripMenuItem;
-	private: CustomControls::FloatTrackBar^ trackPlayBar;
+	private: System::Windows::Forms::TrackBar^ trackPlayBar;
 
 	private: System::Windows::Forms::Timer^ timer1;
 	private: System::Windows::Forms::PictureBox^ playBtn;
@@ -99,7 +98,7 @@ namespace Flopify {
 			this->playBtn = (gcnew System::Windows::Forms::PictureBox());
 			this->pauseResumeBtn = (gcnew System::Windows::Forms::PictureBox());
 			this->stopBtn = (gcnew System::Windows::Forms::PictureBox());
-			this->trackPlayBar = (gcnew CustomControls::FloatTrackBar());
+			this->trackPlayBar = (gcnew System::Windows::Forms::TrackBar());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->volumeIcon = (gcnew System::Windows::Forms::PictureBox());
 			this->volumeBar = (gcnew System::Windows::Forms::TrackBar());
@@ -230,6 +229,7 @@ namespace Flopify {
 			this->trackPlayBar->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->trackPlayBar->Location = System::Drawing::Point(312, 437);
 			this->trackPlayBar->Margin = System::Windows::Forms::Padding(0);
+			this->trackPlayBar->Maximum = 10000;
 			this->trackPlayBar->Name = L"trackPlayBar";
 			this->trackPlayBar->Size = System::Drawing::Size(606, 45);
 			this->trackPlayBar->TabIndex = 6;
@@ -255,6 +255,7 @@ namespace Flopify {
 			// 
 			this->volumeBar->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->volumeBar->Location = System::Drawing::Point(1050, 437);
+			this->volumeBar->Maximum = 10000;
 			this->volumeBar->Name = L"volumeBar";
 			this->volumeBar->Size = System::Drawing::Size(104, 45);
 			this->volumeBar->TabIndex = 8;
@@ -476,7 +477,7 @@ namespace Flopify {
 		//mediaPlayer->Ctlcontrols->currentPosition = trackBar1->Value;
 	}
 
-	private: void ResetTrackBar(float musicDuration)
+	private: void ResetTrackBar(int musicDuration)
 	{
 		trackPlayBar->Minimum = 0;
 		trackPlayBar->Maximum = musicDuration;
