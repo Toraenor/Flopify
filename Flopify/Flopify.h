@@ -312,18 +312,16 @@ namespace Flopify {
 	{
 		if (selectedPanel != nullptr)
 		{
-			// Convert System::String^ to a char* using Marshal
-			IntPtr ptr = System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(System::IO::Path::GetFullPath(selectedPanel->Name));
-			char* unmanagedString = static_cast<char*>(ptr.ToPointer());
+			char* unmanagedPath = ConvertStringToCharPointer(selectedPanel->Name);
 			//ResetTrackBar();
 
-			if (!SoundManager::Get().Play(unmanagedString))
+			if (!SoundManager::Get().Play(unmanagedPath))
 			{
-				MessageBox::Show("couldn't play sound " + selectedPanel->Name);
+				System::String^ managedString = gcnew System::String(unmanagedPath);
+				MessageBox::Show("couldn't play sound " + managedString);
 			}
 
-			// Don't forget to free the memory when done
-			System::Runtime::InteropServices::Marshal::FreeHGlobal(ptr);
+			delete[] unmanagedPath;
 		}
 	}
 	private: System::Void Pause_Click(System::Object^ sender, System::EventArgs^ e)
@@ -357,7 +355,7 @@ namespace Flopify {
 			String^ filePath = openFileDialog->FileName;
 			String^ fileName = System::IO::Path::GetFileName(filePath);
 			musicNames->Add(fileName);
-			CreateMusic(fileName);
+			CreateMusic(filePath);
 		}
 	}
 
@@ -481,6 +479,25 @@ namespace Flopify {
 			// Update the TrackBar to reflect the current position
 			//trackBar1->Value = static_cast<int>(mediaPlayer->Ctlcontrols->currentPosition);
 		//}
+	}
+
+	private: char* ConvertStringToCharPointer(String^ string) {
+
+		// Step 2: Use System::Text::Encoding to get a byte array
+		array<unsigned char>^ byteArray = System::Text::Encoding::UTF8->GetBytes(string);
+
+		// Step 3: Allocate char* buffer
+		char* charPtr = new char[byteArray->Length + 1];
+
+		// Step 4: Copy data to char*
+		for (int i = 0; i < byteArray->Length; i++) {
+			charPtr[i] = byteArray[i];
+		}
+
+		// Null-terminate the char*
+		charPtr[byteArray->Length] = '\0';
+
+		return charPtr;
 	}
 	};
 }
