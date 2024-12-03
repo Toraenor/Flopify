@@ -20,7 +20,7 @@ namespace Flopify {
 		{
 			InitializeComponent();
 
-			musicNames = gcnew System::Collections::Generic::List<String^>();
+			musicFilePaths = gcnew System::Collections::Generic::List<String^>();
 			//
 			//TODO: ajoutez ici le code du constructeur
 			//
@@ -50,7 +50,7 @@ namespace Flopify {
 
 
 
-	private: System::Collections::Generic::List<String^>^ musicNames;
+	private: System::Collections::Generic::List<String^>^ musicFilePaths;
 	private: System::Windows::Forms::ToolStripMenuItem^ openToolStripMenuItem;
 	private: System::Windows::Forms::TrackBar^ trackPlayBar;
 
@@ -359,7 +359,7 @@ namespace Flopify {
 		{
 			String^ filePath = openFileDialog->FileName;
 			String^ fileName = System::IO::Path::GetFileName(filePath);
-			musicNames->Add(filePath);
+			musicFilePaths->Add(filePath);
 			CreateMusic(filePath);
 		}
 	}
@@ -440,7 +440,7 @@ namespace Flopify {
 			while (!reader->EndOfStream)
 			{
 				String^ musicName = reader->ReadLine();
-				musicNames->Add(musicName);
+				musicFilePaths->Add(musicName);
 				CreateMusic(musicName);
 			}
 			reader->Close();
@@ -455,7 +455,7 @@ namespace Flopify {
 		if (saveFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		{
 			System::IO::StreamWriter^ writer = gcnew System::IO::StreamWriter(saveFileDialog->FileName);
-			for each (String ^ musicName in musicNames)
+			for each (String ^ musicName in musicFilePaths)
 			{
 				MessageBox::Show(musicName);
 				writer->WriteLine(musicName);
