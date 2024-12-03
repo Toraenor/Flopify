@@ -321,7 +321,7 @@ namespace Flopify {
 				System::String^ managedString = gcnew System::String(unmanagedPath);
 				MessageBox::Show("couldn't play sound " + managedString);
 			}
-
+			pauseResumeBtn->Image = Image::FromFile("pause.png");
 			delete[] unmanagedPath;
 		}
 	}
@@ -343,6 +343,7 @@ namespace Flopify {
 	}
 	private: System::Void Stop_Click(System::Object^ sender, System::EventArgs^ e)
 	{
+		pauseResumeBtn->Image = Image::FromFile("pause.png");
 		SoundManager::Get().Stop();
 	}
 	private: System::Void addToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
@@ -461,6 +462,15 @@ namespace Flopify {
 	}
 	private: System::Void trackBar1_Scroll(System::Object^ sender, System::EventArgs^ e)
 	{
+		TrackBar^ timeBar = (TrackBar^)sender;
+		float currentTime = timeBar->Value;
+		float maxValue = timeBar->Maximum;
+		float newVolume = 0;
+		if (maxValue != 0)
+		{
+			newVolume = currentTime / maxValue;
+		}
+		SoundManager::Get().ChangeMusicTime(newVolume);
 		// Seek to the selected position
 		//mediaPlayer->Ctlcontrols->currentPosition = trackBar1->Value;
 	}

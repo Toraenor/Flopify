@@ -9,6 +9,8 @@ public :
 	void Stop();
 	bool IsPlaying();
 	void ChangeVolume(float newVolume);
+	void ChangeMusicTime(float newTime);
+	float GetMusicDuration();
 private :
 	SoundManager();
 	~SoundManager();

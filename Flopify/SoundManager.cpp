@@ -24,19 +24,27 @@ SoundManager::SoundManager()
 
 	alGenBuffers(1, &uiBuffer);
 	alGenSources(1, &uiSource);
-
-	
 }
 
 bool SoundManager::Play(const char* path)
 {
 	// Load Wave file into OpenAL Buffer
+	Stop();
 	alSourcei(uiSource, AL_BUFFER, NULL);
-	if (!ALFWLoadWaveToBuffer(path, uiBuffer))
+	System::String^ extension = System::IO::Path::GetExtension(gcnew System::String(path));
+	if (extension == ".wav")
 	{
-		ALFWprintf("Failed to load %s\n", ALFWaddMediaPath(path));
-		return false;
+		if (!ALFWLoadWaveToBuffer(path, uiBuffer))
+		{
+			ALFWprintf("Failed to load %s\n", ALFWaddMediaPath(path));
+			return false;
+		}
 	}
+	else if (extension == ".ogg")
+	{
+
+	}
+	
 	alSourcei(uiSource, AL_BUFFER, uiBuffer);
 	alSourcei(uiSource, AL_LOOPING, 1);
 	
@@ -72,6 +80,35 @@ void SoundManager::ChangeVolume(float newVolume)
 {
 	alSourcef(uiSource, AL_GAIN, newVolume);
 }
+
+void SoundManager::ChangeMusicTime(float newTime)
+{
+	float time = GetMusicDuration() * newTime;
+	Stop();
+	alSourcef(uiSource, AL_SEC_OFFSET, time);
+	alSourcePlay(uiSource);
+}
+
+float SoundManager::GetMusicDuration()
+{
+	ALint sizeInBytes;
+	ALint channels;
+	ALint bits;
+
+	alGetBufferi(uiBuffer, AL_SIZE, &sizeInBytes);
+	alGetBufferi(uiBuffer, AL_CHANNELS, &channels);
+	alGetBufferi(uiBuffer, AL_BITS, &bits);
+
+	float lengthInSamples = sizeInBytes * 8 / (channels * bits);
+
+	ALint frequency;
+
+	alGetBufferi(uiBuffer, AL_FREQUENCY, &frequency);
+
+	float durationInSeconds = (float)lengthInSamples / (float)frequency;
+	return durationInSeconds;
+}
+
 
 
 SoundManager::~SoundManager()
