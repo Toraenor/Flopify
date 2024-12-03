@@ -358,7 +358,7 @@ namespace Flopify {
 		{
 			String^ filePath = openFileDialog->FileName;
 			String^ fileName = System::IO::Path::GetFileName(filePath);
-			musicNames->Add(fileName);
+			musicNames->Add(filePath);
 			CreateMusic(filePath);
 		}
 	}
