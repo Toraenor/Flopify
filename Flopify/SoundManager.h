@@ -8,7 +8,8 @@ private :
 	SoundManager();
 	~SoundManager();
 
-	unsigned int* uiBuffer;
-	unsigned int* uiSource;
+	unsigned int      uiBuffer;
+	unsigned int      uiSource;
+	int				  iState;
 };
 
