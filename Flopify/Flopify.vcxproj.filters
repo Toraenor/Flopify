@@ -36,6 +36,12 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="PlayOggVorbis.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="FloatTrackbar.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Flopify.h">
@@ -55,6 +61,9 @@
     </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>Fichiers sources</Filter>
+    </ClInclude>
+    <ClInclude Include="FloatTrackbar.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

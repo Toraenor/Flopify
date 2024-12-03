@@ -1,5 +1,6 @@
 #pragma once
 #include "SoundManager.h"
+#include "FloatTrackbar.h"
 
 namespace Flopify {
 
@@ -52,7 +53,7 @@ namespace Flopify {
 
 	private: System::Collections::Generic::List<String^>^ musicNames;
 	private: System::Windows::Forms::ToolStripMenuItem^ openToolStripMenuItem;
-	private: System::Windows::Forms::TrackBar^ trackPlayBar;
+	private: CustomControls::FloatTrackBar^ trackPlayBar;
 
 	private: System::Windows::Forms::Timer^ timer1;
 	private: System::Windows::Forms::PictureBox^ playBtn;
@@ -98,7 +99,7 @@ namespace Flopify {
 			this->playBtn = (gcnew System::Windows::Forms::PictureBox());
 			this->pauseResumeBtn = (gcnew System::Windows::Forms::PictureBox());
 			this->stopBtn = (gcnew System::Windows::Forms::PictureBox());
-			this->trackPlayBar = (gcnew System::Windows::Forms::TrackBar());
+			this->trackPlayBar = (gcnew CustomControls::FloatTrackBar());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->volumeIcon = (gcnew System::Windows::Forms::PictureBox());
 			this->volumeBar = (gcnew System::Windows::Forms::TrackBar());
@@ -475,7 +476,7 @@ namespace Flopify {
 		//mediaPlayer->Ctlcontrols->currentPosition = trackBar1->Value;
 	}
 
-	private: void ResetTrackBar(int musicDuration)
+	private: void ResetTrackBar(float musicDuration)
 	{
 		trackPlayBar->Minimum = 0;
 		trackPlayBar->Maximum = musicDuration;
