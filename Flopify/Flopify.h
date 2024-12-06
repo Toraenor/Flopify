@@ -317,9 +317,9 @@ namespace Flopify {
 		if (selectedPanel != nullptr)
 		{
 			char* unmanagedPath = ConvertStringToCharPointer(selectedPanel->Name);
-			//ResetTrackBar();
+			ResetTrackBar();
 
-			if (!SoundManager::Get().Play(unmanagedPath))
+			if (!SoundManager::Instance->Play(selectedPanel->Name))
 			{
 				System::String^ managedString = gcnew System::String(unmanagedPath);
 				MessageBox::Show("couldn't play sound " + managedString);
@@ -331,23 +331,24 @@ namespace Flopify {
 	private: System::Void Pause_Click(System::Object^ sender, System::EventArgs^ e)
 	{
 		//pause selected sound
-		if (SoundManager::Get().IsPlaying())
+		if (SoundManager::Instance->IsPlaying())
 		{
 			//pause playing sound
 			pauseResumeBtn->Image = Image::FromFile("resume.png");
-			SoundManager::Get().Pause();
+			SoundManager::Instance->Pause();
 		}
 		else
 		{
 			//resume sound
 			pauseResumeBtn->Image = Image::FromFile("pause.png");
-			SoundManager::Get().Resume();
+			SoundManager::Instance->Resume();
 		}
 	}
 	private: System::Void Stop_Click(System::Object^ sender, System::EventArgs^ e)
 	{
 		pauseResumeBtn->Image = Image::FromFile("pause.png");
-		SoundManager::Get().Stop();
+		SoundManager::Instance->Stop();
+		ResetTrackBar();
 	}
 	private: System::Void addToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 	{
@@ -473,24 +474,22 @@ namespace Flopify {
 		{
 			newTime = currentTime / maxValue;
 		}
-		SoundManager::Get().ChangeMusicTime(newTime);
+		SoundManager::Instance->ChangeMusicTime(newTime);
 		// Seek to the selected position
 		//mediaPlayer->Ctlcontrols->currentPosition = trackBar1->Value;
 	}
 
-	private: void ResetTrackBar(int musicDuration)
+	private: void ResetTrackBar()
 	{
-		trackPlayBar->Minimum = 0;
-		trackPlayBar->Maximum = musicDuration;
 		trackPlayBar->Value = 0;
 	}
 
 	private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e)
 	{
-		if (SoundManager::Get().IsPlaying())
+		if (SoundManager::Instance->IsPlaying())
 		{
-			float currentTime = SoundManager::Get().GetCurrentMusicTime();
-			float totalTime = SoundManager::Get().GetMusicDuration();
+			float currentTime = SoundManager::Instance->GetCurrentMusicTime();
+			float totalTime = SoundManager::Instance->GetMusicDuration();
 			float percent = currentTime / totalTime;
 			int onMax = trackPlayBar->Maximum * percent;
 			trackPlayBar->Value = onMax;
@@ -526,7 +525,7 @@ namespace Flopify {
 		{
 			newVolume = currentVolume / maxValue;
 		}
-		SoundManager::Get().ChangeVolume(newVolume);
+		SoundManager::Instance->ChangeVolume(newVolume);
 	}
 };
 }
