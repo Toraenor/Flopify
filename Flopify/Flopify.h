@@ -481,6 +481,9 @@ namespace Flopify {
 
 	private: void ResetTrackBar()
 	{
+		volumeBar->Value = volumeBar->Maximum / 10;
+		float newVolume = (float)volumeBar->Value / (float)volumeBar->Maximum;
+		SoundManager::Get().ChangeVolume(newVolume);
 		trackPlayBar->Value = 0;
 	}
 
@@ -490,6 +493,8 @@ namespace Flopify {
 		{
 			float currentTime = SoundManager::Get().GetCurrentMusicTime();
 			float totalTime = SoundManager::Get().GetMusicDuration();
+
+			if (isnan(totalTime)) return;
 			float percent = currentTime / totalTime;
 			int onMax = trackPlayBar->Maximum * percent;
 			trackPlayBar->Value = onMax;

@@ -79,7 +79,7 @@ bool SoundManager::Play(const char* path)
 	{
 		FILE* pOggVorbisFile = fopen(ALFWaddMediaPath(path), "rb");
 		oggThread = std::thread([this, path, pOggVorbisFile]() { this->PlayOGG(path, pOggVorbisFile); });
-		oggThread.detach();
+		oggThread.join();
 
 	}
 	//alSourceStop(uiSource);
@@ -427,7 +427,7 @@ void SoundManager::Update()
 	// Check the status of the Source.  If it is not playing, then playback was completed,
 	// or the Source was starved of audio data, and needs to be restarted.
 	alGetSourcei(uiSource, AL_SOURCE_STATE, &iState);
-	if (iState != AL_PLAYING && iState != AL_PAUSED)
+	if (iState != AL_PLAYING && iState != AL_PAUSED && iState != AL_STOPPED)
 	{
 		ALint queuedBuffer;
 		alGetSourcei(uiSource, AL_BUFFERS_QUEUED, &queuedBuffer);
@@ -435,6 +435,18 @@ void SoundManager::Update()
 		{
 			alSourcePlay(uiSource);
 		}
+	}
+	if (iState == AL_STOPPED)
+	{
+		alSourcei(uiSource, AL_BUFFER, 0);
+
+		if (pDecodeBuffer)
+		{
+			free(pDecodeBuffer);
+			pDecodeBuffer = NULL;
+		}
+
+		return;
 	}
 }
 
