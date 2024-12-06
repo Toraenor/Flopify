@@ -317,7 +317,7 @@ namespace Flopify {
 		if (selectedPanel != nullptr)
 		{
 			char* unmanagedPath = ConvertStringToCharPointer(selectedPanel->Name);
-			ResetTrackBar();
+			ResetBars();
 
 			if (!SoundManager::Instance->Play(selectedPanel->Name))
 			{
@@ -348,7 +348,7 @@ namespace Flopify {
 	{
 		pauseResumeBtn->Image = Image::FromFile("pause.png");
 		SoundManager::Instance->Stop();
-		ResetTrackBar();
+		ResetBars();
 	}
 	private: System::Void addToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 	{
@@ -479,9 +479,10 @@ namespace Flopify {
 		//mediaPlayer->Ctlcontrols->currentPosition = trackBar1->Value;
 	}
 
-	private: void ResetTrackBar()
+	private: void ResetBars()
 	{
 		trackPlayBar->Value = 0;
+		volumeBar->Value = volumeBar->Maximum;
 	}
 
 	private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e)
