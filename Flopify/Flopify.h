@@ -352,8 +352,8 @@ namespace Flopify {
 	private: System::Void addToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 	{
 		OpenFileDialog^ openFileDialog = gcnew OpenFileDialog();
-		openFileDialog->Filter = "WAV files (*.wav)|*.wav|All files (*.*)|*.*";
-		openFileDialog->Title = "Select a WAV File";
+		openFileDialog->Filter = "WAV files (*.wav)|*.wav|OGG files (*.ogg)|*.ogg";
+		openFileDialog->Title = "Select a WAV or OGG File";
 
 		if (openFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		{
