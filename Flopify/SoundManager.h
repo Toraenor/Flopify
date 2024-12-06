@@ -1,6 +1,7 @@
 #pragma once
 #include <thread>
 #include <mutex>
+#include <atomic>
 class SoundManager
 {
 public:
@@ -39,6 +40,7 @@ private:
 	struct OggVorbis_File*	sOggVorbisFile;
 	struct vorbis_info* psVorbisInfo;
 	std::thread oggThread;
+	std::atomic<bool> stopThread = false;
 	std::mutex mutex;
 };
 

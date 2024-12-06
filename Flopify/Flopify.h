@@ -10,6 +10,11 @@ namespace Flopify {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
+	template <typename T>
+	T Clamp(T value, T min, T max) {
+		return (value < min) ? min : (value > max ? max : value);
+	}
+
 	/// <summary>
 	/// Description résumée de Flopify
 	/// </summary>
@@ -497,6 +502,7 @@ namespace Flopify {
 			if (isnan(totalTime)) return;
 			float percent = currentTime / totalTime;
 			int onMax = trackPlayBar->Maximum * percent;
+			onMax = Clamp(onMax, trackPlayBar->Minimum, trackPlayBar->Maximum);
 			trackPlayBar->Value = onMax;
 		}
 	}

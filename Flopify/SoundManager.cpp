@@ -77,9 +77,15 @@ bool SoundManager::Play(const char* path)
 	}
 	else if (extension == ".ogg")
 	{
+		if (oggThread.joinable())
+		{
+			stopThread = true;
+			oggThread.join();
+		}
+
 		FILE* pOggVorbisFile = fopen(ALFWaddMediaPath(path), "rb");
+		stopThread = false;
 		oggThread = std::thread([this, path, pOggVorbisFile]() { this->PlayOGG(path, pOggVorbisFile); });
-		oggThread.join();
 
 	}
 	//alSourceStop(uiSource);
@@ -276,7 +282,7 @@ void SoundManager::PlayOGG(const char* path, FILE* pOggVorbisFile)
 
 			iTotalBuffersProcessed = 0;
 
-			while (!ALFWKeyPress())
+			while (!ALFWKeyPress() && !stopThread)
 			{
 				Sleep(SERVICE_UPDATE_PERIOD);
 
