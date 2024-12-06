@@ -31,12 +31,12 @@
 //
 //#define	TEST_OGGVORBIS_FILE		"stereo.ogg"
 //
-//// Ogg Vorbis
+// Ogg Vorbis
 //
-//// Ogg Voribis DLL Handle
+// Ogg Voribis DLL Handle
 //HINSTANCE g_hVorbisFileDLL = NULL;
 //
-//// Functions
+// Functions
 //void InitVorbisFile();
 //void ShutdownVorbisFile();
 //unsigned long DecodeOggVorbis(OggVorbis_File *psOggVorbisFile, char *pDecodeBuffer, unsigned long ulBufferSize, unsigned long ulChannels);
@@ -47,7 +47,7 @@
 //int ov_close_func(void *datasource);
 //long ov_tell_func(void *datasource);
 //
-//// Function pointers
+// Function pointers
 //typedef int (*LPOVCLEAR)(OggVorbis_File *vf);
 //typedef long (*LPOVREAD)(OggVorbis_File *vf,char *buffer,int length,int bigendianp,int word,int sgned,int *bitstream);
 //typedef ogg_int64_t (*LPOVPCMTOTAL)(OggVorbis_File *vf,int i);
@@ -55,7 +55,7 @@
 //typedef vorbis_comment * (*LPOVCOMMENT)(OggVorbis_File *vf,int link);
 //typedef int (*LPOVOPENCALLBACKS)(void *datasource, OggVorbis_File *vf,char *initial, long ibytes, ov_callbacks callbacks);
 //
-//// Variables
+// Variables
 //LPOVCLEAR			fn_ov_clear = NULL;
 //LPOVREAD			fn_ov_read = NULL;
 //LPOVPCMTOTAL		fn_ov_pcm_total = NULL;
@@ -80,12 +80,12 @@
 //	unsigned long	ulBytesWritten;
 //	char			*pDecodeBuffer;
 //
-//	// Initialize Framework
+//	 Initialize Framework
 //	ALFWInit();
 //
 //	ALFWprintf("PlayOggVorbis Test Application\n");
 //
-//	// Initialize OggVorbis libary
+//	 Initialize OggVorbis libary
 //	InitVorbisFile();
 //	if (!g_bVorbisInit)
 //	{
@@ -94,7 +94,7 @@
 //		return 0;
 //	}
 //
-//	// Initialise OpenAL
+//	 Initialise OpenAL
 //	if (!ALFWInitOpenAL())
 //	{
 //		ALFWprintf("Failed to initialize OpenAL\n");
@@ -102,7 +102,7 @@
 //		return 0;
 //	}
 //
-//	// Open Ogg Stream
+//	 Open Ogg Stream
 //	ov_callbacks	sCallbacks;
 //	OggVorbis_File	sOggVorbisFile;
 //	vorbis_info		*psVorbisInfo;
@@ -112,7 +112,7 @@
 //	sCallbacks.close_func = ov_close_func;
 //	sCallbacks.tell_func = ov_tell_func;
 //
-//	// Open the OggVorbis file
+//	 Open the OggVorbis file
 //	FILE *pOggVorbisFile = fopen(ALFWaddMediaPath(TEST_OGGVORBIS_FILE), "rb");
 //	if (!pOggVorbisFile)
 //	{
@@ -123,10 +123,10 @@
 //		return 0;
 //	}
 //
-//	// Create an OggVorbis file stream
+//	 Create an OggVorbis file stream
 //	if (fn_ov_open_callbacks(pOggVorbisFile, &sOggVorbisFile, NULL, 0, sCallbacks) == 0)
 //	{
-//		// Get some information about the file (Channels, Format, and Frequency)
+//		 Get some information about the file (Channels, Format, and Frequency)
 //		psVorbisInfo = fn_ov_info(&sOggVorbisFile, -1);
 //		if (psVorbisInfo)
 //		{
@@ -135,40 +135,40 @@
 //			if (psVorbisInfo->channels == 1)
 //			{
 //				ulFormat = AL_FORMAT_MONO16;
-//				// Set BufferSize to 250ms (Frequency * 2 (16bit) divided by 4 (quarter of a second))
+//				 Set BufferSize to 250ms (Frequency * 2 (16bit) divided by 4 (quarter of a second))
 //				ulBufferSize = ulFrequency >> 1;
-//				// IMPORTANT : The Buffer Size must be an exact multiple of the BlockAlignment ...
+//				 IMPORTANT : The Buffer Size must be an exact multiple of the BlockAlignment ...
 //				ulBufferSize -= (ulBufferSize % 2);
 //			}
 //			else if (psVorbisInfo->channels == 2)
 //			{
 //				ulFormat = AL_FORMAT_STEREO16;
-//				// Set BufferSize to 250ms (Frequency * 4 (16bit stereo) divided by 4 (quarter of a second))
+//				 Set BufferSize to 250ms (Frequency * 4 (16bit stereo) divided by 4 (quarter of a second))
 //				ulBufferSize = ulFrequency;
-//				// IMPORTANT : The Buffer Size must be an exact multiple of the BlockAlignment ...
+//				 IMPORTANT : The Buffer Size must be an exact multiple of the BlockAlignment ...
 //				ulBufferSize -= (ulBufferSize % 4);
 //			}
 //			else if (psVorbisInfo->channels == 4)
 //			{
 //				ulFormat = alGetEnumValue("AL_FORMAT_QUAD16");
-//				// Set BufferSize to 250ms (Frequency * 8 (16bit 4-channel) divided by 4 (quarter of a second))
+//				 Set BufferSize to 250ms (Frequency * 8 (16bit 4-channel) divided by 4 (quarter of a second))
 //				ulBufferSize = ulFrequency * 2;
-//				// IMPORTANT : The Buffer Size must be an exact multiple of the BlockAlignment ...
+//				 IMPORTANT : The Buffer Size must be an exact multiple of the BlockAlignment ...
 //				ulBufferSize -= (ulBufferSize % 8);
 //			}
 //			else if (psVorbisInfo->channels == 6)
 //			{
 //				ulFormat = alGetEnumValue("AL_FORMAT_51CHN16");
-//				// Set BufferSize to 250ms (Frequency * 12 (16bit 6-channel) divided by 4 (quarter of a second))
+//				 Set BufferSize to 250ms (Frequency * 12 (16bit 6-channel) divided by 4 (quarter of a second))
 //				ulBufferSize = ulFrequency * 3;
-//				// IMPORTANT : The Buffer Size must be an exact multiple of the BlockAlignment ...
+//				 IMPORTANT : The Buffer Size must be an exact multiple of the BlockAlignment ...
 //				ulBufferSize -= (ulBufferSize % 12);
 //			}
 //		}
 //
 //		if (ulFormat != 0)
 //		{
-//			// Allocate a buffer to be used to store decoded data for all Buffers
+//			 Allocate a buffer to be used to store decoded data for all Buffers
 //			pDecodeBuffer = (char*)malloc(ulBufferSize);
 //			if (!pDecodeBuffer)
 //			{
@@ -179,13 +179,13 @@
 //				ALFWShutdown();
 //			}
 //
-//			// Generate some AL Buffers for streaming
+//			 Generate some AL Buffers for streaming
 //			alGenBuffers( NUMBUFFERS, uiBuffers );
 //
-//			// Generate a Source to playback the Buffers
+//			 Generate a Source to playback the Buffers
 //			alGenSources( 1, &uiSource );
 //
-//			// Fill all the Buffers with decoded audio data from the OggVorbis file
+//			 Fill all the Buffers with decoded audio data from the OggVorbis file
 //			for (iLoop = 0; iLoop < NUMBUFFERS; iLoop++)
 //			{
 //				ulBytesWritten = DecodeOggVorbis(&sOggVorbisFile, pDecodeBuffer, ulBufferSize, ulChannels);
@@ -196,7 +196,7 @@
 //				}
 //			}
 //
-//			// Start playing source
+//			 Start playing source
 //			alSourcePlay(uiSource);
 //
 //			iTotalBuffersProcessed = 0;
@@ -205,23 +205,23 @@
 //			{
 //				Sleep( SERVICE_UPDATE_PERIOD );
 //
-//				// Request the number of OpenAL Buffers have been processed (played) on the Source
+//				 Request the number of OpenAL Buffers have been processed (played) on the Source
 //				iBuffersProcessed = 0;
 //				alGetSourcei(uiSource, AL_BUFFERS_PROCESSED, &iBuffersProcessed);
 //
-//				// Keep a running count of number of buffers processed (for logging purposes only)
+//				 Keep a running count of number of buffers processed (for logging purposes only)
 //				iTotalBuffersProcessed += iBuffersProcessed;
 //				ALFWprintf("Buffers Processed %d\r", iTotalBuffersProcessed);
 //
-//				// For each processed buffer, remove it from the Source Queue, read next chunk of audio
-//				// data from disk, fill buffer with new data, and add it to the Source Queue
+//				 For each processed buffer, remove it from the Source Queue, read next chunk of audio
+//				 data from disk, fill buffer with new data, and add it to the Source Queue
 //				while (iBuffersProcessed)
 //				{
-//					// Remove the Buffer from the Queue.  (uiBuffer contains the Buffer ID for the unqueued Buffer)
+//					 Remove the Buffer from the Queue.  (uiBuffer contains the Buffer ID for the unqueued Buffer)
 //					uiBuffer = 0;
 //					alSourceUnqueueBuffers(uiSource, 1, &uiBuffer);
 //
-//					// Read more audio data (if there is any)
+//					 Read more audio data (if there is any)
 //					ulBytesWritten = DecodeOggVorbis(&sOggVorbisFile, pDecodeBuffer, ulBufferSize, ulChannels);
 //					if (ulBytesWritten)
 //					{
@@ -232,13 +232,13 @@
 //					iBuffersProcessed--;
 //				}
 //
-//				// Check the status of the Source.  If it is not playing, then playback was completed,
-//				// or the Source was starved of audio data, and needs to be restarted.
+//				 Check the status of the Source.  If it is not playing, then playback was completed,
+//				 or the Source was starved of audio data, and needs to be restarted.
 //				alGetSourcei(uiSource, AL_SOURCE_STATE, &iState);
 //				if (iState != AL_PLAYING)
 //				{
-//					// If there are Buffers in the Source Queue then the Source was starved of audio
-//					// data, so needs to be restarted (because there is more audio data to play)
+//					 If there are Buffers in the Source Queue then the Source was starved of audio
+//					 data, so needs to be restarted (because there is more audio data to play)
 //					alGetSourcei(uiSource, AL_BUFFERS_QUEUED, &iQueuedBuffers);
 //					if (iQueuedBuffers)
 //					{
@@ -246,13 +246,13 @@
 //					}
 //					else
 //					{
-//						// Finished playing
+//						 Finished playing
 //						break;
 //					}
 //				}
 //			}
 //
-//			// Stop the Source and clear the Queue
+//			 Stop the Source and clear the Queue
 //			alSourceStop(uiSource);
 //			alSourcei(uiSource, AL_BUFFER, 0);
 //
@@ -262,7 +262,7 @@
 //				pDecodeBuffer = NULL;
 //			}
 //
-//			// Clean up buffers and sources
+//			 Clean up buffers and sources
 //			alDeleteSources( 1, &uiSource );
 //			alDeleteBuffers( NUMBUFFERS, uiBuffers );
 //		}
@@ -271,17 +271,17 @@
 //			ALFWprintf("Failed to find format information, or unsupported format\n");
 //		}
 //
-//		// Close OggVorbis stream
+//		 Close OggVorbis stream
 //		fn_ov_clear(&sOggVorbisFile);
 //	}
 //
-//	// Shutdown VorbisFile Library
+//	 Shutdown VorbisFile Library
 //	ShutdownVorbisFile();
 //
-//	// Shutdown AL
+//	 Shutdown AL
 //	ALFWShutdownOpenAL();
 //
-//	// Shutdown Framework
+//	 Shutdown Framework
 //	ALFWShutdown();
 //
 //    return 0;
@@ -292,7 +292,7 @@
 //	if (g_bVorbisInit)
 //		return;
 //
-//	// Try and load Vorbis DLLs (VorbisFile.dll will load ogg.dll and vorbis.dll)
+//	 Try and load Vorbis DLLs (VorbisFile.dll will load ogg.dll and vorbis.dll)
 //	g_hVorbisFileDLL = LoadLibrary(_T("vorbisfile.dll"));
 //	if (g_hVorbisFileDLL)
 //	{
@@ -345,15 +345,15 @@
 //		}
 //	}
 //
-//	// Mono, Stereo and 4-Channel files decode into the same channel order as WAVEFORMATEXTENSIBLE,
-//	// however 6-Channels files need to be re-ordered
+//	 Mono, Stereo and 4-Channel files decode into the same channel order as WAVEFORMATEXTENSIBLE,
+//	 however 6-Channels files need to be re-ordered
 //	if (ulChannels == 6)
 //	{		
 //		pSamples = (short*)pDecodeBuffer;
 //		for (ulSamples = 0; ulSamples < (ulBufferSize>>1); ulSamples+=6)
 //		{
-//			// WAVEFORMATEXTENSIBLE Order : FL, FR, FC, LFE, RL, RR
-//			// OggVorbis Order            : FL, FC, FR,  RL, RR, LFE
+//			 WAVEFORMATEXTENSIBLE Order : FL, FR, FC, LFE, RL, RR
+//			 OggVorbis Order            : FL, FC, FR,  RL, RR, LFE
 //			Swap(pSamples[ulSamples+1], pSamples[ulSamples+2]);
 //			Swap(pSamples[ulSamples+3], pSamples[ulSamples+5]);
 //			Swap(pSamples[ulSamples+4], pSamples[ulSamples+5]);

@@ -4,6 +4,7 @@
 #include "Vorbis/vorbisfile.h"
 #include <iostream>
 #include <tchar.h>
+#include <thread>
 
 #define NUMBUFFERS (4)
 #define	SERVICE_UPDATE_PERIOD	(20)
@@ -45,7 +46,7 @@ SoundManager::SoundManager()
 {
 	ALFWInit();
 
-	
+
 
 	if (!ALFWInitOpenAL())
 	{
@@ -70,18 +71,20 @@ bool SoundManager::Play(const char* path)
 			ALFWprintf("Failed to load %s\n", ALFWaddMediaPath(path));
 			return false;
 		}
+		alSourcei(uiSource, AL_BUFFER, uiBuffer);
+		alSourcei(uiSource, AL_LOOPING, 1);
+		alSourcePlay(uiSource);
 	}
 	else if (extension == ".ogg")
 	{
-		PlayOGG(path);
+		FILE* pOggVorbisFile = fopen(ALFWaddMediaPath(path), "rb");
+		oggThread = std::thread([this, path, pOggVorbisFile]() { this->PlayOGG(path, pOggVorbisFile); });
+		oggThread.detach();
+
 	}
-	
-	alSourcei(uiSource, AL_BUFFER, uiBuffer);
-	alSourcei(uiSource, AL_LOOPING, 1);
-	
 	//alSourceStop(uiSource);
 	// Play Source
-	alSourcePlay(uiSource);
+
 	return true;
 }
 
@@ -155,22 +158,23 @@ SoundManager::~SoundManager()
 	ALFWShutdown();
 }
 
-void SoundManager::PlayOGG(const char* path)
+void SoundManager::PlayOGG(const char* path, FILE* pOggVorbisFile)
 {
+	std::lock_guard<std::mutex> lock(mutex);
+
+	ALCcontext* context = alcGetCurrentContext();
+	ALCdevice* device = alcGetContextsDevice(context);
+	alcMakeContextCurrent(context);
+
 	ALuint		    uiBuffers[NUMBUFFERS];
 	ALint			iState;
 	ALint			iLoop;
 	ALint			iBuffersProcessed, iTotalBuffersProcessed, iQueuedBuffers;
-	unsigned long	ulFrequency = 0;
-	unsigned long	ulFormat = 0;
-	unsigned long	ulChannels = 0;
-	unsigned long	ulBufferSize;
-	unsigned long	ulBytesWritten;
-	char* pDecodeBuffer;
+
+
 
 	ov_callbacks	sCallbacks;
-	OggVorbis_File	sOggVorbisFile;
-	vorbis_info* psVorbisInfo;
+	sOggVorbisFile = new OggVorbis_File;
 
 	sCallbacks.read_func = ov_read_func;
 	sCallbacks.seek_func = ov_seek_func;
@@ -179,24 +183,26 @@ void SoundManager::PlayOGG(const char* path)
 	InitVorbisFile();
 	if (!g_bVorbisInit)
 	{
+		MessageBox::Show("FAIL VORBIS INIT");
 		ALFWprintf("Failed to find OggVorbis DLLs (vorbisfile.dll, ogg.dll, or vorbis.dll)\n");
 		ALFWShutdown();
 		return;
 	}
 	// Open the OggVorbis file
-	FILE* pOggVorbisFile = fopen(ALFWaddMediaPath(path), "rb");
+
 	if (!pOggVorbisFile)
 	{
+		MessageBox::Show("FAIL VORBIS FIND FILE");
 		ALFWprintf("Could not find %s\n", ALFWaddMediaPath(path));
 		ShutdownVorbisFile();
 		ALFWShutdownOpenAL();
 		ALFWShutdown();
 		return;
 	}
-	if (fn_ov_open_callbacks(pOggVorbisFile, &sOggVorbisFile, NULL, 0, sCallbacks) == 0)
+	if (fn_ov_open_callbacks(pOggVorbisFile, sOggVorbisFile, NULL, 0, sCallbacks) == 0)
 	{
 		// Get some information about the file (Channels, Format, and Frequency)
-		psVorbisInfo = fn_ov_info(&sOggVorbisFile, -1);
+		psVorbisInfo = fn_ov_info(sOggVorbisFile, -1);
 		if (psVorbisInfo)
 		{
 			ulFrequency = psVorbisInfo->rate;
@@ -242,7 +248,7 @@ void SoundManager::PlayOGG(const char* path)
 			if (!pDecodeBuffer)
 			{
 				ALFWprintf("Failed to allocate memory for decoded OggVorbis data\n");
-				fn_ov_clear(&sOggVorbisFile);
+				fn_ov_clear(sOggVorbisFile);
 				ShutdownVorbisFile();
 				ALFWShutdownOpenAL();
 				ALFWShutdown();
@@ -257,7 +263,7 @@ void SoundManager::PlayOGG(const char* path)
 			// Fill all the Buffers with decoded audio data from the OggVorbis file
 			for (iLoop = 0; iLoop < NUMBUFFERS; iLoop++)
 			{
-				ulBytesWritten = DecodeOggVorbis(&sOggVorbisFile, pDecodeBuffer, ulBufferSize, ulChannels);
+				ulBytesWritten = DecodeOggVorbis(sOggVorbisFile, pDecodeBuffer, ulBufferSize, ulChannels);
 				if (ulBytesWritten)
 				{
 					alBufferData(uiBuffers[iLoop], ulFormat, pDecodeBuffer, ulBytesWritten, ulFrequency);
@@ -280,45 +286,10 @@ void SoundManager::PlayOGG(const char* path)
 
 				// Keep a running count of number of buffers processed (for logging purposes only)
 				iTotalBuffersProcessed += iBuffersProcessed;
-				ALFWprintf("Buffers Processed %d\r", iTotalBuffersProcessed);
-
+				Update();
 				// For each processed buffer, remove it from the Source Queue, read next chunk of audio
 				// data from disk, fill buffer with new data, and add it to the Source Queue
-				while (iBuffersProcessed)
-				{
-					// Remove the Buffer from the Queue.  (uiBuffer contains the Buffer ID for the unqueued Buffer)
-					uiBuffer = 0;
-					alSourceUnqueueBuffers(uiSource, 1, &uiBuffer);
 
-					// Read more audio data (if there is any)
-					ulBytesWritten = DecodeOggVorbis(&sOggVorbisFile, pDecodeBuffer, ulBufferSize, ulChannels);
-					if (ulBytesWritten)
-					{
-						alBufferData(uiBuffer, ulFormat, pDecodeBuffer, ulBytesWritten, ulFrequency);
-						alSourceQueueBuffers(uiSource, 1, &uiBuffer);
-					}
-
-					iBuffersProcessed--;
-				}
-
-				// Check the status of the Source.  If it is not playing, then playback was completed,
-				// or the Source was starved of audio data, and needs to be restarted.
-				alGetSourcei(uiSource, AL_SOURCE_STATE, &iState);
-				if (iState != AL_PLAYING)
-				{
-					// If there are Buffers in the Source Queue then the Source was starved of audio
-					// data, so needs to be restarted (because there is more audio data to play)
-					alGetSourcei(uiSource, AL_BUFFERS_QUEUED, &iQueuedBuffers);
-					if (iQueuedBuffers)
-					{
-						alSourcePlay(uiSource);
-					}
-					else
-					{
-						// Finished playing
-						break;
-					}
-				}
 			}
 
 			// Stop the Source and clear the Queue
@@ -331,9 +302,6 @@ void SoundManager::PlayOGG(const char* path)
 				pDecodeBuffer = NULL;
 			}
 
-			// Clean up buffers and sources
-			alDeleteSources(1, &uiSource);
-			alDeleteBuffers(NUMBUFFERS, uiBuffers);
 		}
 		else
 		{
@@ -341,7 +309,7 @@ void SoundManager::PlayOGG(const char* path)
 		}
 
 		// Close OggVorbis stream
-		fn_ov_clear(&sOggVorbisFile);
+		fn_ov_clear(sOggVorbisFile);
 	}
 }
 
@@ -354,7 +322,6 @@ void SoundManager::InitVorbisFile()
 	g_hVorbisFileDLL = LoadLibrary(_T("vorbisfile.dll"));
 	if (g_hVorbisFileDLL)
 	{
-		MessageBox::Show("SUCCESS");
 		fn_ov_clear = (LPOVCLEAR)GetProcAddress(g_hVorbisFileDLL, "ov_clear");
 		fn_ov_read = (LPOVREAD)GetProcAddress(g_hVorbisFileDLL, "ov_read");
 		fn_ov_pcm_total = (LPOVPCMTOTAL)GetProcAddress(g_hVorbisFileDLL, "ov_pcm_total");
@@ -431,6 +398,44 @@ void SoundManager::Swap(short& s1, short& s2)
 	short sTemp = s1;
 	s1 = s2;
 	s2 = sTemp;
+}
+
+void SoundManager::Update()
+{
+	ALint iBuffersProcessed = 0;
+	alGetSourcei(uiSource, AL_BUFFERS_PROCESSED, &iBuffersProcessed);
+	while (iBuffersProcessed)
+	{
+		alGetSourcei(uiSource, AL_SOURCE_STATE, &iState);
+		if (iState == AL_PAUSED) continue;
+		alGetSourcei(uiSource, AL_BUFFERS_PROCESSED, &iBuffersProcessed);
+		// Remove the Buffer from the Queue.  (uiBuffer contains the Buffer ID for the unqueued Buffer)
+		uiBuffer = 0;
+		alSourceUnqueueBuffers(uiSource, 1, &uiBuffer);
+
+		// Read more audio data (if there is any)
+		ulBytesWritten = DecodeOggVorbis(sOggVorbisFile, pDecodeBuffer, ulBufferSize, ulChannels);
+		if (ulBytesWritten)
+		{
+			alBufferData(uiBuffer, ulFormat, pDecodeBuffer, ulBytesWritten, ulFrequency);
+			alSourceQueueBuffers(uiSource, 1, &uiBuffer);
+		}
+
+		iBuffersProcessed--;
+	}
+
+	// Check the status of the Source.  If it is not playing, then playback was completed,
+	// or the Source was starved of audio data, and needs to be restarted.
+	alGetSourcei(uiSource, AL_SOURCE_STATE, &iState);
+	if (iState != AL_PLAYING && iState != AL_PAUSED)
+	{
+		ALint queuedBuffer;
+		alGetSourcei(uiSource, AL_BUFFERS_QUEUED, &queuedBuffer);
+		if (queuedBuffer > 0)
+		{
+			alSourcePlay(uiSource);
+		}
+	}
 }
 
 size_t ov_read_func(void* ptr, size_t size, size_t nmemb, void* datasource)

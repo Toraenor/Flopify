@@ -1,4 +1,6 @@
 #pragma once
+#include <thread>
+#include <mutex>
 class SoundManager
 {
 public:
@@ -17,14 +19,26 @@ private:
 	SoundManager();
 	~SoundManager();
 
-	void PlayOGG(const char* path);
+	void PlayOGG(const char* path, FILE* pOggVorbisFile);
 	void InitVorbisFile();
 	void ShutdownVorbisFile();
 	unsigned long DecodeOggVorbis(class OggVorbis_File* psOggVorbisFile, char* pDecodeBuffer, unsigned long ulBufferSize, unsigned long ulChannels);
 	void Swap(short& s1, short& s2);
+	void Update();
 
 	unsigned int      uiBuffer;
 	unsigned int      uiSource;
 	int				  iState;
+
+	unsigned long	ulFrequency = 0;
+	unsigned long	ulFormat = 0;
+	unsigned long	ulChannels = 0;
+	unsigned long	ulBufferSize;
+	unsigned long	ulBytesWritten;
+	char* pDecodeBuffer;
+	struct OggVorbis_File*	sOggVorbisFile;
+	struct vorbis_info* psVorbisInfo;
+	std::thread oggThread;
+	std::mutex mutex;
 };
 
