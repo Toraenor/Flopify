@@ -158,8 +158,6 @@ SoundManager::~SoundManager()
 void SoundManager::PlayOGG(const char* path)
 {
 	ALuint		    uiBuffers[NUMBUFFERS];
-	ALuint		    uiSource;
-	ALuint			uiBuffer;
 	ALint			iState;
 	ALint			iLoop;
 	ALint			iBuffersProcessed, iTotalBuffersProcessed, iQueuedBuffers;
